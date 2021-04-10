@@ -1,27 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class BallComponentTransform : MonoBehaviour
 {
-    public float transformingSpeed;
+    Vector3 newScale = new Vector3(1, 1, 1);
+    private float scallingSpeed = 1.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.localScale = Vector3.one;
-
-        transformingSpeed = 1.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(transform.localScale.x < 3.0f && transform.localScale.y < 3.0f && transform.localScale.z < 3.0f)
-        {
-            transform.localScale += Vector3.right * Time.deltaTime * transformingSpeed;
-            transform.localScale += Vector3.up * Time.deltaTime * transformingSpeed;
-            transform.localScale += Vector3.forward * Time.deltaTime * transformingSpeed;
-        }
+        ScallingObject();
+    }
+
+    void ScallingObject()
+    {
+        if (transform.localScale.x >= 3.0f)
+            return;
+
+        transform.localScale += newScale * Time.deltaTime * scallingSpeed;
     }
 }

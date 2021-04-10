@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class BallComponent : MonoBehaviour
 {
-    private int frame;
+    private int frames;
     private float timer;
-
-    private int[] numberOfFrame = new int[10];
-    private int thisFrame;
+    Queue<int> tenFrames = new Queue<int>();
+    private int secondsPassed;
     private int avarageFramerate;
 
     
@@ -17,51 +17,37 @@ public class BallComponent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        frame = 0;
+        frames = 0;
         timer = 0;
-        thisFrame = 0;
         avarageFramerate = 0;
+        secondsPassed = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
-        frame++;
+        frames++;
 
         CheckIfSecondPass();
-
-        
     }
 
     void CheckIfSecondPass()
     {
         if (timer > 1)
         {
-            Debug.Log("Frames per seconds: " + frame);
+            if (secondsPassed > 10) return;
 
-            numberOfFrame[thisFrame] = frame;
-            thisFrame++;
+            secondsPassed++;
+            tenFrames.Enqueue(frames);
 
-            if (thisFrame == 10)
-            {
-                AvarageCounter();
-                Debug.Log("Avarage 10 sec framerate: " + avarageFramerate);
+            avarageFramerate = (int)tenFrames.Average();
 
-                thisFrame = 0;
-            }
+            Debug.Log(avarageFramerate);
 
-            frame = 0;
             timer = 0;
+            frames = 0;
         }
-    }
-
-    void AvarageCounter()
-    {
-        for (int x = 0; x < numberOfFrame.Length; x++)
-        {
-            avarageFramerate += numberOfFrame[x];
-        }
-        avarageFramerate /= numberOfFrame.Length;
+        
     }
 }
