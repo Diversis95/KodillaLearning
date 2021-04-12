@@ -9,7 +9,6 @@ public class BallComponent : MonoBehaviour
     private int frames;
     private float timer;
     Queue<int> tenFrames = new Queue<int>();
-    private int secondsPassed;
     private int avarageFramerate;
 
     
@@ -20,7 +19,6 @@ public class BallComponent : MonoBehaviour
         frames = 0;
         timer = 0;
         avarageFramerate = 0;
-        secondsPassed = 0;
     }
 
     // Update is called once per frame
@@ -36,10 +34,7 @@ public class BallComponent : MonoBehaviour
     {
         if (timer > 1)
         {
-            if (secondsPassed > 10) return;
-
-            secondsPassed++;
-            tenFrames.Enqueue(frames);
+            ControlOnFrameCount();
 
             avarageFramerate = (int)tenFrames.Average();
 
@@ -48,6 +43,14 @@ public class BallComponent : MonoBehaviour
             timer = 0;
             frames = 0;
         }
-        
+    }
+
+    void ControlOnFrameCount()
+    {
+        tenFrames.Enqueue(frames);
+        if (tenFrames.Count() > 10)
+        {
+            tenFrames.Dequeue();
+        }
     }
 }
