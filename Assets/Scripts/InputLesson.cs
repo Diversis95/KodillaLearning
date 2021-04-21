@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InputLesson : Singleton<GameplayManager>
 {
@@ -11,26 +9,29 @@ public class InputLesson : Singleton<GameplayManager>
         m_rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void Update()
+    {
+        if (GameplayManager.Instance.pause)
+            m_rigidbody.simulated = false;
+        else
+            m_rigidbody.simulated = true;
+    }
+
     void OnMouseUp()
     {
-        PauseOnMouseUp();
+        m_rigidbody.simulated = true;
     }
      
     void OnMouseDrag()
     {
-        PauseOnMouseDrag(); 
-    }
-
-    private void PauseOnMouseUp()
-    {
-        m_rigidbody.simulated = true;
-    }
-
-    private void PauseOnMouseDrag()
-    {
         m_rigidbody.simulated = false;
 
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = new Vector3(worldPos.x, worldPos.y, 0);
+        if (GameplayManager.Instance.pause)
+            return;
+        else
+        {
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            transform.position = new Vector3(worldPos.x, worldPos.y, 0);
+        } 
     }
 }
