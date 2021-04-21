@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputLesson : MonoBehaviour
+public class InputLesson : Singleton<GameplayManager>
 {
     Rigidbody2D m_rigidbody;
 
@@ -11,12 +11,22 @@ public class InputLesson : MonoBehaviour
         m_rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    private void OnMouseUp()
+    void OnMouseUp()
+    {
+        PauseOnMouseUp();
+    }
+     
+    void OnMouseDrag()
+    {
+        PauseOnMouseDrag(); 
+    }
+
+    private void PauseOnMouseUp()
     {
         m_rigidbody.simulated = true;
     }
 
-    private void OnMouseDrag()
+    private void PauseOnMouseDrag()
     {
         m_rigidbody.simulated = false;
 
