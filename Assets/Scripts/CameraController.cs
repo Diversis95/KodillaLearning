@@ -15,16 +15,13 @@ public class CameraController : MonoBehaviour
         originalPosition = transform.position;
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (!followedTarget.IsSimulated())
             return;
 
-        /*transform.position = followedTarget.transform.position + originalPosition;*/
-
-
         transform.position = Vector3.MoveTowards(transform.position,
             followedTarget.transform.position + originalPosition,
-            followedTarget.Speed() * Time.deltaTime);
+            followedTarget.PhysicsSpeed * Time.deltaTime);
     }
 }
