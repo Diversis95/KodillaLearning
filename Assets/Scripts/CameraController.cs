@@ -24,4 +24,9 @@ public class CameraController : MonoBehaviour
             followedTarget.transform.position + originalPosition,
             followedTarget.PhysicsSpeed * Time.deltaTime);
     }
+
+    public void ResetCamera()
+    {
+        transform.position = followedTarget.transform.position + originalPosition;
+    }
 }

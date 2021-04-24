@@ -8,11 +8,15 @@ public class SimulationComponents : Singleton<GameplayManager>
     private LineRenderer lineRenderer;
     private TrailRenderer trailRenderer;
 
+    public CameraController cameraController;
+
     public float slingStart = 0.5f;
     public float maxSpringDistance = 2.5f;
 
-    private bool hittedTheGround = false;
+    public bool hittedTheGround = false;
 
+    private Vector3 startPosition;
+    private Quaternion startRotation;
     private Vector3 slingshotArms;
 
     private void Start()
@@ -24,8 +28,8 @@ public class SimulationComponents : Singleton<GameplayManager>
         trailRenderer = GetComponent<TrailRenderer>();
 
         slingshotArms = new Vector3(0.5f, 0 , 0);
-
-        trailRenderer.enabled = false;
+        startPosition = transform.position;
+        startRotation = transform.rotation;
     }
 
     void Update()
@@ -33,14 +37,17 @@ public class SimulationComponents : Singleton<GameplayManager>
         if(transform.position.x > connectedBodies.transform.position.x + slingStart)
         {
             connectedJoints.enabled = false;
-            lineRenderer.enabled = false;
         }
+
+        trailRenderer.enabled = !hittedTheGround;
+
+        if (Input.GetKeyUp(KeyCode.R))
+            Restart();
     }
 
     void OnMouseUp()
     {
         rigidbody.simulated = true;
-        trailRenderer.enabled = true;
     }
 
     void OnMouseDrag()
@@ -54,16 +61,9 @@ public class SimulationComponents : Singleton<GameplayManager>
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 newBallPos = new Vector3(worldPos.x, worldPos.y);
 
-        Vector3 backgroundArm = connectedBodies.transform.position + slingshotArms;
-        Vector3 foregroundArm = connectedBodies.transform.position - slingshotArms;
-
         float curJointDistance = Vector3.Distance(newBallPos, connectedBodies.transform.position);
 
-        lineRenderer.positionCount = 3;
-        lineRenderer.SetPositions(new Vector3[] { 
-            backgroundArm, 
-            transform.position,
-            foregroundArm});
+        SetLineRendererPoints();
 
         if (curJointDistance > maxSpringDistance)
         {
@@ -87,5 +87,34 @@ public class SimulationComponents : Singleton<GameplayManager>
         {
             hittedTheGround = true;
         }
+    }
+
+    void Restart()
+    {
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = 0.0f;
+        rigidbody.simulated = true;
+
+        connectedJoints.enabled = true;
+        lineRenderer.enabled = true;
+        trailRenderer.enabled = true;
+
+        SetLineRendererPoints();
+        cameraController.ResetCamera();
+    }
+
+    void SetLineRendererPoints()
+    {
+        Vector3 backgroundArm = connectedBodies.transform.position + slingshotArms;
+        Vector3 foregroundArm = connectedBodies.transform.position - slingshotArms;
+
+        lineRenderer.positionCount = 3;
+        lineRenderer.SetPositions(new Vector3[] {
+            backgroundArm,
+            transform.position,
+            foregroundArm});
     }
 }

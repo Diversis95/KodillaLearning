@@ -969,8 +969,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d95c962982179e4caf84788aea11329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraController: {fileID: 519420030}
   slingStart: 0.5
   maxSpringDistance: 2.5
+  hittedTheGround: 0
 --- !u!114 &1970254174
 MonoBehaviour:
   m_ObjectHideFlags: 0
