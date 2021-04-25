@@ -17,5 +17,8 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         if (Input.GetKeyDown(KeyCode.Space))
             pause = !pause;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
     }
 }
