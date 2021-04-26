@@ -1,11 +1,10 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 
 public class SimulationComponents : Singleton<GameplayManager>
 {
     new Rigidbody2D rigidbody;
     private Rigidbody2D connectedBodies;
     private SpringJoint2D connectedJoints;
-    private LineRenderer lineRenderer;
     private TrailRenderer trailRenderer;
     public CameraController cameraController;
     private AudioSource audioSource;
@@ -13,6 +12,7 @@ public class SimulationComponents : Singleton<GameplayManager>
     public AudioClip shootSound;
     private Animator animator;
     private ParticleSystem particle;
+    public HiddenBallManager hiddenBall;
 
     public float slingStart = 0.5f;
     public float maxSpringDistance = 2.5f;
@@ -29,25 +29,22 @@ public class SimulationComponents : Singleton<GameplayManager>
         rigidbody = GetComponent<Rigidbody2D>();
         connectedJoints = GetComponent<SpringJoint2D>();
         connectedBodies = connectedJoints.connectedBody;
-        lineRenderer = GetComponent<LineRenderer>();
         trailRenderer = GetComponent<TrailRenderer>();
         audioSource = GetComponent<AudioSource>();
         animator = GetComponentInChildren<Animator>();
         particle = GetComponentInChildren<ParticleSystem>();
 
-        slingshotArms = new Vector3(0.4f, 0 , 0);
+        slingshotArms = new Vector3(0.4f, 0, 0);
         startPosition = transform.position;
         startRotation = transform.rotation;
     }
 
     void Update()
     {
-        if(transform.position.x > connectedBodies.transform.position.x + slingStart)
+        if (transform.position.x > connectedBodies.transform.position.x + slingStart)
         {
             connectedJoints.enabled = false;
         }
-
-        SetLineRendererPoints();
 
         trailRenderer.enabled = !hittedTheGround;
 
@@ -61,23 +58,6 @@ public class SimulationComponents : Singleton<GameplayManager>
             return;
 
         audioSource.PlayOneShot(pullSound);
-
-    }
-
-    void OnMouseUp()
-    {
-        if (hittedTheGround || isFlying)
-            return;
-
-        isFlying = true;
-
-        rigidbody.simulated = true;
-
-        lineRenderer.enabled = false;
-
-        audioSource.PlayOneShot(shootSound);
-
-        particle.Play();
     }
 
     void OnMouseDrag()
@@ -105,6 +85,20 @@ public class SimulationComponents : Singleton<GameplayManager>
             transform.position = newBallPos;
     }
 
+    void OnMouseUp()
+    {
+        if (hittedTheGround || isFlying)
+            return;
+
+        isFlying = true;
+
+        rigidbody.simulated = true;
+
+        audioSource.PlayOneShot(shootSound);
+
+        particle.Play();
+    }
+
     public bool IsSimulated()
     {
         return rigidbody.simulated;
@@ -114,7 +108,7 @@ public class SimulationComponents : Singleton<GameplayManager>
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             hittedTheGround = true;
         }
@@ -133,24 +127,11 @@ public class SimulationComponents : Singleton<GameplayManager>
         rigidbody.simulated = true;
 
         connectedJoints.enabled = true;
-        lineRenderer.enabled = true;
         trailRenderer.enabled = true;
         hittedTheGround = false;
         isFlying = false;
+        hiddenBall.SetLineRendererPoints();
 
-        SetLineRendererPoints();
         cameraController.ResetCamera();
-    }
-
-    void SetLineRendererPoints()
-    {
-        Vector3 backgroundArm = connectedBodies.transform.position + slingshotArms;
-        Vector3 foregroundArm = connectedBodies.transform.position - slingshotArms;
-
-        lineRenderer.positionCount = 3;
-        lineRenderer.SetPositions(new Vector3[] {
-            backgroundArm,
-            transform.position,
-            foregroundArm});
     }
 }
