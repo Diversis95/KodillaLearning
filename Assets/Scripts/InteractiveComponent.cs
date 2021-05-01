@@ -19,7 +19,11 @@ public class InteractiveComponent : MonoBehaviour, IRestartableObject
 
     public virtual void DoRestart()
     {
-        
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = 0.0f;
     }
 
     protected virtual void DoPlay()

@@ -22,13 +22,4 @@ public class Target : InteractiveComponent
             audioSource.PlayOneShot(hitSound);
         }
     }
-
-    public override void DoRestart()
-    {
-        transform.position = startPosition;
-        transform.rotation = startRotation;
-
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.angularVelocity = 0.0f;
-    }
 }

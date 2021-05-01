@@ -18,6 +18,9 @@ public class GameplayManager : Singleton<GameplayManager>
     public static event GameStateCallBack onGamePaused;
     public static event GameStateCallBack onGamePlaying;
 
+    private HUDController HUD;
+    private int points = 0;
+
     public EGameState GameState
     {
         get { return m_state; }
@@ -40,29 +43,29 @@ public class GameplayManager : Singleton<GameplayManager>
         }
     }
 
+    public int Points
+    {
+        get { return points; }
+        set
+        {
+            points = value;
+            HUD.UpdatePoints(points);
+        }
+    }
+
     private void Start()
     {
         m_state = EGameState.Playing;
         GetAllRestartableObjects();
+
+        HUD = FindObjectOfType<HUDController>();
+        points = 0;
     }
 
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Space))
-        {
-            switch (GameState)
-            {
-                case EGameState.Paused:
-                    {
-                        GameState = EGameState.Playing;
-                    } break;
-
-                case EGameState.Playing:
-                    {
-                        GameState = EGameState.Paused;
-                    } break;
-            }
-        }
+            PlayPause();
 
         if (Input.GetKeyUp(KeyCode.R))
             Restart();
@@ -86,5 +89,17 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         foreach (var restartableObject in m_restartableObjects)
             restartableObject.DoRestart();
+
+        points = 0;
+    }
+
+    public void PlayPause()
+    {
+        switch (GameState)
+        {
+            case EGameState.Paused: { GameState = EGameState.Playing; } break;
+
+            case EGameState.Playing: { GameState = EGameState.Paused; } break;
+        }
     }
 }

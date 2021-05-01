@@ -104,15 +104,14 @@ public class SimulationComponents : InteractiveComponent
         }
         animator.enabled = true;
         animator.Play(0);
+
+        GameplayManager.Instance.Points += 1;
     }
 
     public override void DoRestart()
     {
-        transform.position = startPosition;
-        transform.rotation = startRotation;
+        base.DoRestart();
 
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.angularVelocity = 0.0f;
         rigidbody.simulated = true;
 
         connectedJoints.enabled = true;
