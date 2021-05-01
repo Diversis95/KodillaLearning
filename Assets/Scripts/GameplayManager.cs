@@ -1,24 +1,90 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameplayManager : Singleton<GameplayManager>
 {
-    public bool pause = false;
+    List<IRestartableObject> m_restartableObjects = new List<IRestartableObject>();
 
-    // Start is called before the first frame update
-    void Start()
+    public enum EGameState
     {
-        pause = false;
+        Playing,
+        Paused
+    }
+    public EGameState m_state;
+
+    public delegate void GameStateCallBack();
+
+    public static event GameStateCallBack onGamePaused;
+    public static event GameStateCallBack onGamePlaying;
+
+    public EGameState GameState
+    {
+        get { return m_state; }
+        set 
+        {
+            m_state = value;
+            switch (m_state)
+            {
+                case EGameState.Paused:
+                    {
+                        if (onGamePaused != null)
+                            onGamePaused();
+                    } break;
+                case EGameState.Playing:
+                    {
+                        if (onGamePlaying != null)
+                            onGamePlaying();
+                    } break;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            pause = !pause;
+        m_state = EGameState.Playing;
+        GetAllRestartableObjects();
+    }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            switch (GameState)
+            {
+                case EGameState.Paused:
+                    {
+                        GameState = EGameState.Playing;
+                    } break;
+
+                case EGameState.Playing:
+                    {
+                        GameState = EGameState.Paused;
+                    } break;
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.R))
+            Restart();
+    }
+
+    private void GetAllRestartableObjects()
+    {
+        m_restartableObjects.Clear();
+
+        GameObject[] rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+        foreach (var rootGameObject in rootGameObjects)
+        {
+            IRestartableObject[] childrenInterfaces = rootGameObject.GetComponentsInChildren<IRestartableObject>();
+
+            foreach (var childInterface in childrenInterfaces)
+                m_restartableObjects.Add(childInterface);
+        }
+    }
+
+    private void Restart()
+    {
+        foreach (var restartableObject in m_restartableObjects)
+            restartableObject.DoRestart();
     }
 }

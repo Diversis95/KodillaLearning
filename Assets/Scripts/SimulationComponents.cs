@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
 
-public class SimulationComponents : Singleton<GameplayManager>
+public class SimulationComponents : InteractiveComponent
 {
-    new Rigidbody2D rigidbody;
     private Rigidbody2D connectedBodies;
     private SpringJoint2D connectedJoints;
     private TrailRenderer trailRenderer;
     public CameraController cameraController;
-    private AudioSource audioSource;
     public AudioClip pullSound;
     public AudioClip shootSound;
     private Animator animator;
-    private ParticleSystem particle;
     public HiddenBallManager hiddenBall;
 
     public float slingStart = 0.5f;
@@ -20,8 +17,6 @@ public class SimulationComponents : Singleton<GameplayManager>
     public bool isFlying = false;
     public bool hittedTheGround = false;
 
-    private Vector3 startPosition;
-    private Quaternion startRotation;
     private Vector3 slingshotArms;
 
     private void Start()
@@ -29,12 +24,13 @@ public class SimulationComponents : Singleton<GameplayManager>
         rigidbody = GetComponent<Rigidbody2D>();
         connectedJoints = GetComponent<SpringJoint2D>();
         connectedBodies = connectedJoints.connectedBody;
-        trailRenderer = GetComponent<TrailRenderer>();
         audioSource = GetComponent<AudioSource>();
+        trailRenderer = GetComponent<TrailRenderer>();
         animator = GetComponentInChildren<Animator>();
         particle = GetComponentInChildren<ParticleSystem>();
 
         slingshotArms = new Vector3(0.4f, 0, 0);
+
         startPosition = transform.position;
         startRotation = transform.rotation;
     }
@@ -47,9 +43,6 @@ public class SimulationComponents : Singleton<GameplayManager>
         }
 
         trailRenderer.enabled = !hittedTheGround;
-
-        if (Input.GetKeyUp(KeyCode.R))
-            Restart();
     }
 
     private void OnMouseDown()
@@ -67,9 +60,6 @@ public class SimulationComponents : Singleton<GameplayManager>
 
         rigidbody.simulated = false;
         hittedTheGround = false;
-
-        if (GameplayManager.Instance.pause)
-            return;
 
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 newBallPos = new Vector3(worldPos.x, worldPos.y);
@@ -112,12 +102,11 @@ public class SimulationComponents : Singleton<GameplayManager>
         {
             hittedTheGround = true;
         }
-
         animator.enabled = true;
         animator.Play(0);
     }
 
-    void Restart()
+    public override void DoRestart()
     {
         transform.position = startPosition;
         transform.rotation = startRotation;
@@ -133,5 +122,5 @@ public class SimulationComponents : Singleton<GameplayManager>
         hiddenBall.SetLineRendererPoints();
 
         cameraController.ResetCamera();
-    }
+    }    
 }
