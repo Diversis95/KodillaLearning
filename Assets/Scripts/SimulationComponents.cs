@@ -19,8 +19,9 @@ public class SimulationComponents : InteractiveComponent
 
     private Vector3 slingshotArms;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         rigidbody = GetComponent<Rigidbody2D>();
         connectedJoints = GetComponent<SpringJoint2D>();
         connectedBodies = connectedJoints.connectedBody;
@@ -111,8 +112,6 @@ public class SimulationComponents : InteractiveComponent
     public override void DoRestart()
     {
         base.DoRestart();
-
-        rigidbody.simulated = true;
 
         connectedJoints.enabled = true;
         trailRenderer.enabled = true;

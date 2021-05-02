@@ -4,8 +4,10 @@ public class Target : InteractiveComponent
 {
     public AudioClip hitSound;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         rigidbody = GetComponent<Rigidbody2D>();
         particle = GetComponentInChildren<ParticleSystem>();
         audioSource = GetComponentInChildren<AudioSource>();

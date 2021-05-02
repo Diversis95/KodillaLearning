@@ -64,11 +64,8 @@ public class GameplayManager : Singleton<GameplayManager>
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Escape))
             PlayPause();
-
-        if (Input.GetKeyUp(KeyCode.R))
-            Restart();
     }
 
     private void GetAllRestartableObjects()
@@ -85,7 +82,7 @@ public class GameplayManager : Singleton<GameplayManager>
         }
     }
 
-    private void Restart()
+    public void Restart()
     {
         foreach (var restartableObject in m_restartableObjects)
             restartableObject.DoRestart();
@@ -97,9 +94,8 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         switch (GameState)
         {
-            case EGameState.Paused: { GameState = EGameState.Playing; } break;
-
             case EGameState.Playing: { GameState = EGameState.Paused; } break;
+            case EGameState.Paused: { GameState = EGameState.Playing; } break;
         }
     }
 }
