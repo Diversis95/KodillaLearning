@@ -12,10 +12,6 @@ public class HUDController : MonoBehaviour
         pauseButton.onClick.AddListener(delegate {
             GameplayManager.Instance.PlayPause();
         });
-
-        restartButton.onClick.AddListener(delegate {
-            GameplayManager.Instance.Restart();
-        });
     }
 
     public void UpdatePoints(int points)
