@@ -106,7 +106,8 @@ public class SimulationComponents : InteractiveComponent
         animator.enabled = true;
         animator.Play(0);
 
-        GameplayManager.Instance.Points += 1;
+        if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Target"))
+            GameplayManager.Instance.Points += 1;
     }
 
     public override void DoRestart()
@@ -120,5 +121,5 @@ public class SimulationComponents : InteractiveComponent
         hiddenBall.SetLineRendererPoints();
 
         cameraController.ResetCamera();
-    }    
+    }
 }

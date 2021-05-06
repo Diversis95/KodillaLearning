@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,22 +20,36 @@ public class BeachBallLevitate : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        curYPos = Mathf.PingPong(Time.time, amplitude) - amplitude * 0.5f;
-        transform.position = new Vector3(startPosition.x,
-            startPosition.y + curYPos,
-            startPosition.z);
 
-        curXSca = Mathf.PingPong(Time.time, scale);
-        curYSca = Mathf.PingPong(Time.time, scale);
+        StartCoroutine(LevitateBall());
 
-        transform.localScale = new Vector3(curXSca, curYSca, 0);
+    }
 
-        curZRot += Time.deltaTime + rotationSpeed;
-        transform.rotation = Quaternion.Euler(0, 0, curZRot);
+    IEnumerator LevitateBall()
+    {
+        while(true)
+        {
+            curYPos = Mathf.PingPong(Time.time, amplitude) - amplitude * 0.5f;
+            transform.position = new Vector3(startPosition.x,
+                startPosition.y + curYPos,
+                startPosition.z);
+
+            curXSca = Mathf.PingPong(Time.time, scale);
+            curYSca = Mathf.PingPong(Time.time, scale);
+
+            transform.localScale = new Vector3(curXSca, curYSca, 0);
+
+            curZRot += rotationSpeed * Time.deltaTime;
+            transform.rotation = Quaternion.Euler(0, 0, curZRot);
+
+            yield return new WaitForSeconds(3.0f);
+        }
     }
 }

@@ -58,6 +58,8 @@ public class PauseMenuController : MonoBehaviour
 
     private void OnYesQuit()
     {
+        SaveManager.Instance.SaveSettings();
+
         Application.Quit();
     }
 
