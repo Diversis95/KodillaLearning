@@ -16,17 +16,12 @@ public class BeachBallLevitate : MonoBehaviour
     public float amplitude = 1.0f;
     public float rotationSpeed = 50;
 
+    public bool isMoving = true;
+
     // Start is called before the first frame update
     void Start()
     {
         startPosition = transform.position;
-
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
 
         StartCoroutine(LevitateBall());
 
@@ -34,22 +29,33 @@ public class BeachBallLevitate : MonoBehaviour
 
     IEnumerator LevitateBall()
     {
-        while(true)
+        while (true)
         {
-            curYPos = Mathf.PingPong(Time.time, amplitude) - amplitude * 0.5f;
-            transform.position = new Vector3(startPosition.x,
-                startPosition.y + curYPos,
-                startPosition.z);
+            if (isMoving)
+            {
+                yield return null;
 
-            curXSca = Mathf.PingPong(Time.time, scale);
-            curYSca = Mathf.PingPong(Time.time, scale);
+                curYPos = Mathf.PingPong(Time.time, amplitude) - amplitude * 0.5f;
+                transform.position = new Vector3(startPosition.x,
+                    startPosition.y + curYPos,
+                    startPosition.z);
 
-            transform.localScale = new Vector3(curXSca, curYSca, 0);
+                curXSca = Mathf.PingPong(Time.time, scale);
+                curYSca = Mathf.PingPong(Time.time, scale);
 
-            curZRot += rotationSpeed * Time.deltaTime;
-            transform.rotation = Quaternion.Euler(0, 0, curZRot);
+                transform.localScale = new Vector3(curXSca, curYSca, 0);
 
-            yield return new WaitForSeconds(3.0f);
+                curZRot += rotationSpeed * Time.deltaTime;
+                transform.rotation = Quaternion.Euler(0, 0, curZRot);
+
+                if(transform.position.y <= -1.99f)
+                    isMoving = false;
+            }
+            else
+            {
+                yield return new WaitForSeconds(3);
+                isMoving = true;
+            }
         }
     }
 }
