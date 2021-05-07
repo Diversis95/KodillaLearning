@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class BeachBallLevitate : MonoBehaviour
 {
@@ -17,6 +19,7 @@ public class BeachBallLevitate : MonoBehaviour
     public float rotationSpeed = 50;
 
     public bool isMoving = true;
+    float timer;
 
     // Start is called before the first frame update
     void Start()
@@ -27,29 +30,42 @@ public class BeachBallLevitate : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (isMoving == true)
+            timer += Time.deltaTime;
+
+        Debug.Log(timer);
+    }
+
     IEnumerator LevitateBall()
     {
         while (true)
         {
             if (isMoving)
             {
+
                 yield return null;
 
-                curYPos = Mathf.PingPong(Time.time, amplitude) - amplitude * 0.5f;
+                curYPos = Mathf.PingPong(timer, amplitude) - amplitude * 0.5f;
                 transform.position = new Vector3(startPosition.x,
                     startPosition.y + curYPos,
                     startPosition.z);
 
-                curXSca = Mathf.PingPong(Time.time, scale);
-                curYSca = Mathf.PingPong(Time.time, scale);
+                curXSca = Mathf.PingPong(timer, scale);
+                curYSca = Mathf.PingPong(timer, scale);
 
                 transform.localScale = new Vector3(curXSca, curYSca, 0);
 
                 curZRot += rotationSpeed * Time.deltaTime;
                 transform.rotation = Quaternion.Euler(0, 0, curZRot);
 
-                if(transform.position.y <= -1.99f)
+                if (timer >= 2f)
+                {
                     isMoving = false;
+                    timer = 0;
+                }
+                    
             }
             else
             {
