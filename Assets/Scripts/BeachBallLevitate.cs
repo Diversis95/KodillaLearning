@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class BeachBallLevitate : MonoBehaviour
 {
@@ -16,40 +18,60 @@ public class BeachBallLevitate : MonoBehaviour
     public float amplitude = 1.0f;
     public float rotationSpeed = 50;
 
+    public bool isMoving = true;
+    float timer;
+
     // Start is called before the first frame update
     void Start()
     {
         startPosition = transform.position;
 
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
         StartCoroutine(LevitateBall());
 
     }
 
+    private void Update()
+    {
+        if (isMoving == true)
+            timer += Time.deltaTime;
+
+        Debug.Log(timer);
+    }
+
     IEnumerator LevitateBall()
     {
-        while(true)
+        while (true)
         {
-            curYPos = Mathf.PingPong(Time.time, amplitude) - amplitude * 0.5f;
-            transform.position = new Vector3(startPosition.x,
-                startPosition.y + curYPos,
-                startPosition.z);
+            if (isMoving)
+            {
 
-            curXSca = Mathf.PingPong(Time.time, scale);
-            curYSca = Mathf.PingPong(Time.time, scale);
+                yield return null;
 
-            transform.localScale = new Vector3(curXSca, curYSca, 0);
+                curYPos = Mathf.PingPong(timer, amplitude) - amplitude * 0.5f;
+                transform.position = new Vector3(startPosition.x,
+                    startPosition.y + curYPos,
+                    startPosition.z);
 
-            curZRot += rotationSpeed * Time.deltaTime;
-            transform.rotation = Quaternion.Euler(0, 0, curZRot);
+                curXSca = Mathf.PingPong(timer, scale);
+                curYSca = Mathf.PingPong(timer, scale);
 
-            yield return new WaitForSeconds(3.0f);
+                transform.localScale = new Vector3(curXSca, curYSca, 0);
+
+                curZRot += rotationSpeed * Time.deltaTime;
+                transform.rotation = Quaternion.Euler(0, 0, curZRot);
+
+                if (timer >= 2f)
+                {
+                    isMoving = false;
+                    timer = 0;
+                }
+                    
+            }
+            else
+            {
+                yield return new WaitForSeconds(3);
+                isMoving = true;
+            }
         }
     }
 }
