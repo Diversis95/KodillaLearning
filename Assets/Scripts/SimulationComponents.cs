@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SimulationComponents : InteractiveComponent
 {
@@ -34,16 +35,24 @@ public class SimulationComponents : InteractiveComponent
 
         startPosition = transform.position;
         startRotation = transform.rotation;
+
+        StartCoroutine(CheckJointsConnection());
     }
 
-    void Update()
+    IEnumerator CheckJointsConnection()
     {
-        if (transform.position.x > connectedBodies.transform.position.x + slingStart)
+        while(true)
         {
-            connectedJoints.enabled = false;
-        }
+            yield return null;
+            yield return null;
 
-        trailRenderer.enabled = !hittedTheGround;
+            if (transform.position.x > connectedBodies.transform.position.x + slingStart)
+            {
+                connectedJoints.enabled = false;
+            }
+
+            trailRenderer.enabled = !hittedTheGround;
+        }
     }
 
     private void OnMouseDown()
