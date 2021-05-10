@@ -6,6 +6,11 @@ public class GameplayManager : Singleton<GameplayManager>
 {
     List<IRestartableObject> m_restartableObjects = new List<IRestartableObject>();
 
+    public GameObject simpleAnimeProp;
+    public GameSettingsDatabase gameDatabase;
+
+    public bool isPlaying = false;
+
     public enum EGameState
     {
         Playing,
@@ -60,6 +65,7 @@ public class GameplayManager : Singleton<GameplayManager>
 
         HUD = FindObjectOfType<HUDController>();
         points = 0;
+        GameObject.Instantiate(simpleAnimeProp, new Vector3(-4.6f, 0f, 0f), Quaternion.identity);
     }
 
     private void Update()
@@ -94,8 +100,8 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         switch (GameState)
         {
-            case EGameState.Playing: { GameState = EGameState.Paused; } break;
-            case EGameState.Paused: { GameState = EGameState.Playing; } break;
+            case EGameState.Playing: { GameState = EGameState.Paused; isPlaying = false; } break;
+            case EGameState.Paused: { GameState = EGameState.Playing; isPlaying = true; } break;
         }
     }
 }

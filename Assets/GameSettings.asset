@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a811c4e87dc094f43a405caee1875618, type: 3}
+  m_Name: GameSettings
+  m_EditorClassIdentifier: 
+  targetPrefab: {fileID: 4920072378716750616, guid: dfcf2ba194bbb7148a012741f0dde455,
+    type: 3}
+  ballShootSound: {fileID: 8300000, guid: d115ccfa377ebe147ada4c3cee584554, type: 3}
+  ballPullSound: {fileID: 8300000, guid: 3ba132fdd4765b74893a98822b8127dd, type: 3}
+  targetHitSound: {fileID: 8300000, guid: 61cfe6b33595aba4b9052be8a2e063f0, type: 3}
