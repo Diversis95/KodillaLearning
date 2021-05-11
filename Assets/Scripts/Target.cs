@@ -22,6 +22,8 @@ public class Target : InteractiveComponent
         {
             particle.Play();
             audioSource.PlayOneShot(gameDatabase.targetHitSound);
+
+            GameObject.Destroy(this.gameObject, 1.0f);
         }
     }
 }
