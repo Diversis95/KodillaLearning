@@ -26,14 +26,8 @@ public class PauseMenuController : MonoBehaviour
 
         SetPanelVisible(false);
         SetQuitPanelVisible(false);
-    }
 
-    private void Update()
-    {
-        if (MainMenuController.menuIsActive == false)
-            GameplayManager.onGamePaused += OnPause;
-        else
-            GameplayManager.onGamePaused -= OnPause;
+        GameplayManager.onGamePaused += OnPause;
     }
 
     public void SetPanelVisible(bool visible)

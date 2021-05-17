@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,8 +23,8 @@ public class GameplayManager : Singleton<GameplayManager>
 
     public static event GameStateCallBack onGamePaused;
     public static event GameStateCallBack onGamePlaying;
+    public static event Action<int> PointsUpdated;
 
-    private HUDController HUD;
     private int points = 0;
 
     public EGameState GameState
@@ -54,7 +55,7 @@ public class GameplayManager : Singleton<GameplayManager>
         set
         {
             points = value;
-            HUD.UpdatePoints(points);
+            PointsUpdated?.Invoke(points);
         }
     }
 
@@ -63,7 +64,6 @@ public class GameplayManager : Singleton<GameplayManager>
         m_state = EGameState.Playing;
         GetAllRestartableObjects();
 
-        HUD = FindObjectOfType<HUDController>();
         points = 0;
         GameObject.Instantiate(simpleAnimeProp, new Vector3(-4.6f, 0f, 0f), Quaternion.identity);
     }

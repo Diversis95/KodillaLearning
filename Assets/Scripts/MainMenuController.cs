@@ -27,7 +27,7 @@ public class MainMenuController : MonoBehaviour
     {
         //---Main Menu Buttons---
         playButton.onClick.AddListener(delegate { OnPlay(); });
-        optionsButton.onClick.AddListener(delegate { showOptions(true); });
+        optionsButton.onClick.AddListener(delegate { ShowOptions(true); });
         exitButton.onClick.AddListener(delegate { OnExit(); });
 
         //---Main Menu Panels Visibility---
@@ -52,7 +52,7 @@ public class MainMenuController : MonoBehaviour
         menuIsActive = false;
     }
 
-    public void showOptions(bool bShow)
+    public void ShowOptions(bool bShow)
     {
         optionsPanel.SetActive(bShow);
     }

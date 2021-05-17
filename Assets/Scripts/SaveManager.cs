@@ -13,7 +13,7 @@ public struct GameSaveData
 
 public class SaveManager : Singleton<SaveManager>
 {
-    public GameSaveData SaveData;
+    public GameSaveData gameSaveData;
 
     float overallTime = 0.0f;
 
@@ -30,7 +30,7 @@ public class SaveManager : Singleton<SaveManager>
         pathBin = Path.Combine(Application.persistentDataPath, "save.bin");
         pathJSON = Path.Combine(Application.persistentDataPath, "save.JSON");
 
-        SaveData.masterVolume = AudioListener.volume;
+        gameSaveData.masterVolume = AudioListener.volume;
         LoadSettings();
     }
 
@@ -50,12 +50,12 @@ public class SaveManager : Singleton<SaveManager>
         {
             FileStream file = new FileStream(pathBin, FileMode.OpenOrCreate);
             BinaryFormatter binFormat = new BinaryFormatter();
-            binFormat.Serialize(file, SaveData);
+            binFormat.Serialize(file, gameSaveData);
             file.Close();
         }
         else
         {
-            string saveData = JsonUtility.ToJson(SaveData);
+            string saveData = JsonUtility.ToJson(gameSaveData);
             File.WriteAllText(pathJSON, saveData);
         }
     }
@@ -66,7 +66,7 @@ public class SaveManager : Singleton<SaveManager>
         {
             FileStream file = new FileStream(pathBin, FileMode.Open);
             BinaryFormatter binFormat = new BinaryFormatter();
-            SaveData = (GameSaveData)binFormat.Deserialize(file);
+            gameSaveData = (GameSaveData)binFormat.Deserialize(file);
             file.Close();
             ApplySettings();
         }
@@ -74,18 +74,18 @@ public class SaveManager : Singleton<SaveManager>
         {
             ApplySettings();
             string saveData = File.ReadAllText(pathJSON);
-            SaveData = JsonUtility.FromJson<GameSaveData>(saveData);
+            gameSaveData = JsonUtility.FromJson<GameSaveData>(saveData);
         }
         else
         {
             GameSaveData.timeSinceLastSave = 0.0f;
-            AudioListener.volume = SaveData.masterVolume;
+            AudioListener.volume = gameSaveData.masterVolume;
         }
     }
 
     public void ApplySettings()
     {
-        AudioListener.volume = SaveData.masterVolume;
+        AudioListener.volume = gameSaveData.masterVolume;
     }
 }
 

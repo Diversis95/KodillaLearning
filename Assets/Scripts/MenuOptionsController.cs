@@ -11,7 +11,7 @@ public class MenuOptionsController : MonoBehaviour
 
     public MainMenuController mainMenu;
 
-    private float initialVolume = 0.0f;
+    private float initialVolume = 0.75f;
 
     private void Start()
     {
@@ -26,14 +26,14 @@ public class MenuOptionsController : MonoBehaviour
 
     private void OnAccept()
     {
-        SaveManager.Instance.SaveData.masterVolume = AudioListener.volume;
+        SaveManager.Instance.gameSaveData.masterVolume = AudioListener.volume;
         SaveManager.Instance.SaveSettings();
-        mainMenu.showOptions(false);
+        mainMenu.ShowOptions(false);
     }
 
     private void OnCancel()
     {
         AudioListener.volume = initialVolume;
-        mainMenu.showOptions(false);
+        mainMenu.ShowOptions(false);
     }
 }
