@@ -2,7 +2,7 @@
 
 public class Target : InteractiveComponent
 {
-    public AudioClip hitSound;
+    public GameSettingsDatabase gameDatabase;
 
     protected override void Awake()
     {
@@ -21,7 +21,7 @@ public class Target : InteractiveComponent
         if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Ball"))
         {
             particle.Play();
-            audioSource.PlayOneShot(hitSound);
+            audioSource.PlayOneShot(gameDatabase.targetHitSound);
         }
     }
 }

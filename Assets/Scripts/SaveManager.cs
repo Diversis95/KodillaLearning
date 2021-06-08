@@ -1,23 +1,26 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 using System.Runtime.Serialization.Formatters.Binary;
 
+public struct GameSaveData
+{
+    public static float timeSinceLastSave;
+    public float masterVolume;
+}
+
 public class SaveManager : Singleton<SaveManager>
 {
+    public GameSaveData gameSaveData;
+
     float overallTime = 0.0f;
 
     private string pathBin;
     private string pathJSON;
 
     public bool useBinary = true;
-    public GameSaveData saveData;
-
-    public struct GameSaveData
-    {
-        public static float timeSinceLastSave;
-    }
 
     public void Start()
     {
@@ -26,6 +29,9 @@ public class SaveManager : Singleton<SaveManager>
 
         pathBin = Path.Combine(Application.persistentDataPath, "save.bin");
         pathJSON = Path.Combine(Application.persistentDataPath, "save.JSON");
+
+        gameSaveData.masterVolume = AudioListener.volume;
+        LoadSettings();
     }
 
     public void Update()
@@ -35,32 +41,51 @@ public class SaveManager : Singleton<SaveManager>
 
     public void SaveSettings()
     {
+        GameSaveData.timeSinceLastSave = 0.0f;
         overallTime += GameSaveData.timeSinceLastSave;
         Debug.Log("Saving overall time value: " + overallTime);
         PlayerPrefs.SetFloat("OverallTime", overallTime);
-        GameSaveData.timeSinceLastSave = 0.0f;
 
         if(useBinary)
         {
             FileStream file = new FileStream(pathBin, FileMode.OpenOrCreate);
             BinaryFormatter binFormat = new BinaryFormatter();
-            binFormat.Serialize(file, saveData);
+            binFormat.Serialize(file, gameSaveData);
             file.Close();
+        }
+        else
+        {
+            string saveData = JsonUtility.ToJson(gameSaveData);
+            File.WriteAllText(pathJSON, saveData);
         }
     }
 
     public void LoadSettings()
     {
-        overallTime = PlayerPrefs.GetFloat("OverallTime", 0.0f);
-        Debug.Log("Loaded overall time: " + overallTime);
-
         if(useBinary && File.Exists(pathBin))
         {
             FileStream file = new FileStream(pathBin, FileMode.Open);
             BinaryFormatter binFormat = new BinaryFormatter();
-            saveData = (GameSaveData)binFormat.Deserialize(file);
+            gameSaveData = (GameSaveData)binFormat.Deserialize(file);
             file.Close();
+            ApplySettings();
         }
+        else if(!useBinary && File.Exists(pathJSON))
+        {
+            ApplySettings();
+            string saveData = File.ReadAllText(pathJSON);
+            gameSaveData = JsonUtility.FromJson<GameSaveData>(saveData);
+        }
+        else
+        {
+            GameSaveData.timeSinceLastSave = 0.0f;
+            AudioListener.volume = gameSaveData.masterVolume;
+        }
+    }
+
+    public void ApplySettings()
+    {
+        AudioListener.volume = gameSaveData.masterVolume;
     }
 }
 

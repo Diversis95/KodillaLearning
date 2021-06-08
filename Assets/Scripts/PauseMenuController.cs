@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
 {
+    public MainMenuController mainMenu;
     public Button restartButton;
     public Button resumeButton;
     public Button quitButton;
@@ -42,7 +43,8 @@ public class PauseMenuController : MonoBehaviour
 
     private void OnPause()
     {
-        SetPanelVisible(true);
+        if(mainMenu.mainPanel.activeSelf == false)
+            SetPanelVisible(true);
     }
     private void OnResume()
     {

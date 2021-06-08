@@ -13,9 +13,13 @@ public class HUDController : MonoBehaviour
         pauseButton.onClick.AddListener(delegate {
             GameplayManager.Instance.PlayPause();
         });
+
+        GameplayManager.PointsUpdated += UpdatePoints;
+
+        pointsText.text = "";
     }
 
-    public void UpdatePoints(int points)
+    private void UpdatePoints(int points)
     {
         pointsText.text = "Points: " + points;
     }

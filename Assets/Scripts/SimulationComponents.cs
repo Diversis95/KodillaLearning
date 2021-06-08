@@ -7,10 +7,9 @@ public class SimulationComponents : InteractiveComponent
     private SpringJoint2D connectedJoints;
     private TrailRenderer trailRenderer;
     public CameraController cameraController;
-    public AudioClip pullSound;
-    public AudioClip shootSound;
     private Animator animator;
     public HiddenBallManager hiddenBall;
+    public GameSettingsDatabase gameDatabase;
 
     public float slingStart = 0.5f;
     public float maxSpringDistance = 2.5f;
@@ -60,7 +59,7 @@ public class SimulationComponents : InteractiveComponent
         if (hittedTheGround || isFlying)
             return;
 
-        audioSource.PlayOneShot(pullSound);
+        audioSource.PlayOneShot(gameDatabase.ballPullSound);
     }
 
     void OnMouseDrag()
@@ -94,7 +93,7 @@ public class SimulationComponents : InteractiveComponent
 
         rigidbody.simulated = true;
 
-        audioSource.PlayOneShot(shootSound);
+        audioSource.PlayOneShot(gameDatabase.ballShootSound);
 
         particle.Play();
     }

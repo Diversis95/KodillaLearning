@@ -34,8 +34,6 @@ public class BeachBallLevitate : MonoBehaviour
     {
         if (isMoving == true)
             timer += Time.deltaTime;
-
-        Debug.Log(timer);
     }
 
     IEnumerator LevitateBall()
