@@ -14,7 +14,6 @@ public class AssetBundlesManager : Singleton<AssetBundlesManager>
     private void Start()
     {
         StartCoroutine(LoadAssets());
-        StartCoroutine(LoadAssetsFromURL());
     }
 
     private IEnumerator LoadAssets()
