@@ -8,8 +8,9 @@ public class ProgressBar : MonoBehaviour
 {
     private Slider slider;
 
-    public float fillSpeed = 0.5f;
     private float targetProgress = 0;
+    public float timeToComplet = 10;
+    private float actualPassed;
 
     private void Awake()
     {
@@ -25,7 +26,11 @@ public class ProgressBar : MonoBehaviour
     {
         if(slider.value < targetProgress)
         {
-            slider.value += fillSpeed * Time.deltaTime;
+            if(actualPassed < timeToComplet)
+            {
+                actualPassed += Time.deltaTime;
+                slider.value = actualPassed/timeToComplet;
+            }
         }
     }
 

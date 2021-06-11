@@ -7,24 +7,21 @@ using System.Runtime.Remoting.Messaging;
 public class SpriteAssetLoader : Singleton<SpriteAssetLoader>
 {
     public string spriteName;
-    private SpriteRenderer spriteRenderer;
-    private Sprite sprite;
 
-    private void Start()
+    SpriteRenderer sprite;
+
+    private void Update()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>();
 
-        StartCoroutine(SetSprite());
+        SetSprite();
     }
 
-    private IEnumerator SetSprite()
+    void SetSprite()
     {
-        sprite = Resources.Load<Sprite>(spriteName);
-
         if(Input.GetKeyDown(KeyCode.E))
         {
-            spriteRenderer.sprite = sprite;
+            sprite.sprite = AssetBundlesManager.Instance.GetSprite(spriteName);
         }
-        yield return spriteRenderer;
     }
 }
