@@ -9,6 +9,9 @@
         _ColorTint("Color Tint",Color) = (1,1,1,1)
         _SpeedX("Speed along X", Range(-0.25, 0.25)) = 0
         _SpeedY("Speed along Y", Range(-0.25, 0.25)) = 0
+        _Amplitude("Wave Amplitude", float) = 0.1
+        _Frequency("Wave Frequency", float) = 100
+        _PhaseMultiplier("Wave Phase Multiplier", float) = 1
     }
         SubShader
     {
@@ -44,6 +47,9 @@
             fixed4 _ColorTint;
             float _SpeedX;
             float _SpeedY;
+            float _Amplitude;
+            float _Frequency;
+            float _PhaseMultiplier;
 
             v2f vert(appdata v)
             {
@@ -51,6 +57,7 @@
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.uv2 = TRANSFORM_TEX(v.uv2, _DisplacementTexture);
+                o.vertex.y += _Amplitude * sin(_Frequency * _Time.x + o.vertex.x * _PhaseMultiplier);
                 return o;
             }
 
