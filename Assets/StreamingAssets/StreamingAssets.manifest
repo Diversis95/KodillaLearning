@@ -1,7 +1,19 @@
 ManifestFileVersion: 0
-CRC: 151966469
+CRC: 2851665217
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: sprites
+      Name: prefab1
+      Dependencies:
+        Dependency_0: sprite
+    Info_1:
+      Name: prefab2
+      Dependencies:
+        Dependency_0: sprite
+    Info_2:
+      Name: sprite
       Dependencies: {}
+    Info_3:
+      Name: scenes
+      Dependencies:
+        Dependency_0: sprite

@@ -4,27 +4,27 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
 
-public class SpriteAssetLoader : Singleton<SpriteAssetLoader>
+public class SpriteAssetLoader : MonoBehaviour
 {
     public string spriteName;
-    private SpriteRenderer spriteRenderer;
-    private Sprite sprite;
 
-    private void Start()
+    SpriteRenderer sprite;
+
+    private void Awake()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-
-        StartCoroutine(SetSprite());
+        sprite = GetComponent<SpriteRenderer>();
     }
 
-    private IEnumerator SetSprite()
+    private void Update()
     {
-        sprite = Resources.Load<Sprite>(spriteName);
+        SetSprite();
+    }
 
+    void SetSprite()
+    {
         if(Input.GetKeyDown(KeyCode.E))
         {
-            spriteRenderer.sprite = sprite;
+            sprite.sprite = AssetBundlesManager.Instance.GetSprite(spriteName);
         }
-        yield return spriteRenderer;
     }
 }
