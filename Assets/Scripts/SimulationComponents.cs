@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SimulationComponents : InteractiveComponent
@@ -10,9 +12,11 @@ public class SimulationComponents : InteractiveComponent
     private Animator animator;
     public HiddenBallManager hiddenBall;
     public GameSettingsDatabase gameDatabase;
+    public Sprite[] ballSprites;
 
     public float slingStart = 0.5f;
     public float maxSpringDistance = 2.5f;
+    public int missCount;
 
     public bool isFlying = false;
     public bool hittedTheGround = false;
@@ -31,6 +35,8 @@ public class SimulationComponents : InteractiveComponent
         particle = GetComponentInChildren<ParticleSystem>();
 
         slingshotArms = new Vector3(0.4f, 0, 0);
+
+        //GetComponent<SpriteRenderer>().sprite = ballSprites[AnalyticsManager.Instance.GetIntParameter("SpriteIndex")];
 
         startPosition = transform.position;
         startRotation = transform.rotation;
@@ -110,12 +116,19 @@ public class SimulationComponents : InteractiveComponent
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             hittedTheGround = true;
+            missCount += 1;
+            string missCounter = missCount.ToString();
+            AnalyticsManager.Instance.SendEvent("TargetMissed", "miss counter", missCounter);
         }
         animator.enabled = true;
         animator.Play(0);
 
         if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Target"))
+        {
             GameplayManager.Instance.Points += 1;
+        }
+
+        DoRestart();
     }
 
     public override void DoRestart()

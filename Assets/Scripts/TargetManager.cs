@@ -8,6 +8,8 @@ public class TargetManager : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip hitSound;
 
+    private bool gotHit;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +23,12 @@ public class TargetManager : MonoBehaviour
         {
             particle.Play();
             audioSource.PlayOneShot(hitSound);
+        }
+
+        if (!gotHit)
+        {
+            AnalyticsManager.Instance.SendEvent("HitTarget");
+            gotHit = true;
         }
     }
 }

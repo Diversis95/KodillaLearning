@@ -4,6 +4,8 @@ public class Target : InteractiveComponent
 {
     public GameSettingsDatabase gameDatabase;
 
+    private bool gotHit;
+
     protected override void Awake()
     {
         base.Awake();
@@ -22,6 +24,14 @@ public class Target : InteractiveComponent
         {
             particle.Play();
             audioSource.PlayOneShot(gameDatabase.targetHitSound);
+
+            if (!gotHit)
+            {
+                AnalyticsManager.Instance.SendEvent("HitTarget");
+                gotHit = true;
+                DoRestart();
+                gotHit = false;
+            }
         }
     }
 }

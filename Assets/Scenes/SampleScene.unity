@@ -1479,6 +1479,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &530988116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 530988118}
+  - component: {fileID: 530988117}
+  m_Layer: 0
+  m_Name: AnalyticsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &530988117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530988116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fab2e355fdfe3dc4f88d330a9ec6f2b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &530988118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530988116}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 331.34198, y: 284.97458, z: -134.23195}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &544543213
 GameObject:
   m_ObjectHideFlags: 0
@@ -8461,7 +8504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 1970254168}
-  ballComponents: {fileID: 1970254173}
+  ballComponents: {fileID: 1970254179}
   maxSpringDistance: 2.5
 --- !u!212 &1080020077
 SpriteRenderer:
@@ -11707,7 +11750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1970254170}
   - component: {fileID: 1970254169}
-  - component: {fileID: 1970254173}
+  - component: {fileID: 1970254179}
   - component: {fileID: 1970254172}
   - component: {fileID: 1970254171}
   - component: {fileID: 1970254174}
@@ -11825,25 +11868,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.35
---- !u!114 &1970254173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1970254168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d95c962982179e4caf84788aea11329, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraController: {fileID: 519420030}
-  hiddenBall: {fileID: 1080020076}
-  gameDatabase: {fileID: 11400000, guid: 40bb445f685cb514fb0a9cbe9adb5af8, type: 2}
-  slingStart: 0.5
-  maxSpringDistance: 2.5
-  isFlying: 0
-  hittedTheGround: 0
 --- !u!114 &1970254174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12170,6 +12194,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1970254179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970254168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d95c962982179e4caf84788aea11329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 519420030}
+  hiddenBall: {fileID: 1080020076}
+  gameDatabase: {fileID: 11400000, guid: 40bb445f685cb514fb0a9cbe9adb5af8, type: 2}
+  ballSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  slingStart: 0.5
+  maxSpringDistance: 2.5
+  missCount: 0
+  isFlying: 0
+  hittedTheGround: 0
 --- !u!1 &1982861808
 GameObject:
   m_ObjectHideFlags: 0

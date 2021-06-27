@@ -12,11 +12,13 @@ public class BallComponent : InteractiveComponent
     public GameSettingsDatabase gameDatabase;
     public Sprite[] ballSprites;
 
+
     public float slingStart = 0.5f;
     public float maxSpringDistance = 2.5f;
 
     public bool isFlying = false;
     public bool hittedTheGround = false;
+    public bool firstShootHitted = false;
 
     private Vector3 slingshotArms;
 
@@ -107,7 +109,7 @@ public class BallComponent : InteractiveComponent
 
     public float PhysicsSpeed => rigidbody.velocity.magnitude;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private IEnumerator OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
@@ -117,7 +119,13 @@ public class BallComponent : InteractiveComponent
         animator.Play(0);
 
         if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Target"))
+        {
             GameplayManager.Instance.Points += 1;
+        }
+
+        Destroy(gameObject);
+
+        yield return new WaitForSeconds(3f);    
     }
 
     public override void DoRestart()
