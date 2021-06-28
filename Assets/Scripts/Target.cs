@@ -27,9 +27,8 @@ public class Target : InteractiveComponent
 
             if (!gotHit)
             {
-                AnalyticsManager.Instance.SendEvent("HitTarget");
                 gotHit = true;
-                DoRestart();
+                AnalyticsManager.Instance.SendEvent("HitTarget");
                 gotHit = false;
             }
         }
